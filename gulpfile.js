@@ -1,17 +1,22 @@
+ /* установка строгого режима */
 "use strict";
 
+/* импортируем модули и пакеты, которые понадобятся в сборке */
 const gulp = require("gulp");
 const webpack = require("webpack-stream");
 const browsersync = require("browser-sync");
 
+/* путь, куда все будет компилироваться */
 const dist = "./dist/";
 
+/* отслеживать изминения, которые вносим в html файл */
 gulp.task("copy-html", () => {
     return gulp.src("./src/index.html")
                 .pipe(gulp.dest(dist))
                 .pipe(browsersync.stream());
 });
 
+/* компиляция скриптов */
 gulp.task("build-js", () => {
     return gulp.src("./src/js/main.js")
                 .pipe(webpack({
@@ -50,6 +55,7 @@ gulp.task("copy-assets", () => {
                 .on("end", browsersync.reload);
 });
 
+/* запуск отдельного сервера */
 gulp.task("watch", () => {
     browsersync.init({
 		server: "./dist/",
@@ -57,13 +63,16 @@ gulp.task("watch", () => {
 		notify: true
     });
     
+    /* следить за запуском отдельных файлов */
     gulp.watch("./src/index.html", gulp.parallel("copy-html"));
     gulp.watch("./src/assets/**/*.*", gulp.parallel("copy-assets"));
     gulp.watch("./src/js/**/*.js", gulp.parallel("build-js"));
 });
 
+/* запускает паралельно три задачи */
 gulp.task("build", gulp.parallel("copy-html", "copy-assets", "build-js"));
 
+/* тоже самое что и build-js, только с доп. плагинами и запускается дольше по времени */
 gulp.task("build-prod-js", () => {
     return gulp.src("./src/js/main.js")
                 .pipe(webpack({
@@ -92,4 +101,5 @@ gulp.task("build-prod-js", () => {
                 .pipe(gulp.dest(dist));
 });
 
+/* задача, которая запускается по умолчанию */
 gulp.task("default", gulp.parallel("watch", "build"));
