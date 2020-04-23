@@ -7,7 +7,9 @@ const webpack = require("webpack-stream");
 const browsersync = require("browser-sync");
 
 /* путь, куда все будет компилироваться */
-const dist = "./dist/";
+// const dist = "./dist/";
+// const dist = "/MAMP/htdocs/test"
+const dist = "/OSPanel/domains/test";
 
 /* отслеживать изминения, которые вносим в html файл */
 gulp.task("copy-html", () => {
