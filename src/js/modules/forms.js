@@ -1,15 +1,12 @@
-const forms = () => {
+import checkNumInputs from './checkNumInputs';
+
+const forms = (state) => {
  /*  получаем элементы которые нам понадобятся */
   const form = document.querySelectorAll('form'),
-        inputs = document.querySelectorAll('input'),
-        phoneInputs = document.querySelectorAll('input[name="user_phone"]');
+        inputs = document.querySelectorAll('input');
 
- /*  можно ввести только цифры */
-  phoneInputs.forEach(item => {
-    item.addEventListener('input', () => {
-      item.value = item.value.replace(/\D/, '');
-    });
-  });
+
+checkNumInputs('input[name="user_phone"]');
 
   /* создаем обьект с сообщениями */
   const message = {
@@ -48,6 +45,11 @@ const forms = () => {
 
         /* сбор данных которые есть в форме */
         const formData = new FormData(item);
+        if(item.getAttribute('data-calc') === "end") {
+          for (let key in state) {
+            formData.append(key, state[key]);
+          }
+        }
 
         /* написание самого запроса на сервер */
         postData('assets/server.php', formData)
